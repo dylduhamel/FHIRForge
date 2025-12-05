@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from src.api.models import ConversionRequest, ConversionResponse, Entity
+from src.nlp.extractor import get_extractor
 
 app = FastAPI(
     title="Clinical Notes to FHIR Converter",
@@ -39,20 +40,13 @@ async def convert(request: ConversionRequest):
     - Validation warnings
     """
     try:
-        entities = [
-            Entity(
-                text="chest pain",
-                entity_type="condition",
-                start=20,
-                end=30,
-                confidence=0.95
-            )
-        ]
+        extractor = get_extractor()
+        entities = extractor.extract_entities(request.clinical_note)
 
         return ConversionResponse(
             status="success",
             entities=entities,
-            warnings=["NLP pipeline not yet implemented"]
+            warnings=["NLP pipeline not yet implemented"] if entities else []
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
