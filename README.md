@@ -33,11 +33,20 @@ FHIRForge is a developer tool that transforms unstructured clinical notes into s
 - Docker containerization
 - Poetry dependency management
 
+✅ **Phase 1.5 Complete** (Web UI)
+- Streamlit web interface
+- Interactive entity highlighting
+- Example clinical note templates
+- Tabbed results display
+- FHIR bundle download
+- Real-time API integration
+
 ## Tech Stack
 
 ### Core
 - **Python 3.11** with Poetry for dependency management
 - **FastAPI** - REST API framework
+- **Streamlit** - Web UI framework
 - **Pydantic** - Data validation
 
 ### NLP & AI
@@ -64,12 +73,15 @@ fhirforge/
 │   │   └── models.py        # Pydantic request/response models
 │   ├── nlp/
 │   │   └── extractor.py     # Entity extraction logic
-│   └── fhir/
-│       └── generator.py     # FHIR resource generation
+│   ├── fhir/
+│   │   └── generator.py     # FHIR resource generation
+│   └── ui/
+│       └── streamlit_app.py # Streamlit web interface
 ├── tests/
 │   ├── test_api.py
 │   └── test_extractor.py
 ├── run.py                   # Application entry point
+├── start_ui.sh             # Start both API and UI
 ├── pyproject.toml          # Poetry dependencies
 ├── Dockerfile
 └── docker-compose.yml
@@ -89,15 +101,45 @@ poetry install
 
 # Download spaCy model
 poetry run python -m spacy download en_core_web_sm
+```
 
-# Run the application
+### Running the Application
+
+**Option 1: Web UI (Recommended)**
+```bash
+# Start both API and Streamlit UI
+./start_ui.sh
+
+# Then open your browser to:
+# - UI: http://localhost:8501
+# - API Docs: http://localhost:8000/docs
+```
+
+**Option 2: API Only**
+```bash
+# Run FastAPI server
 poetry run python run.py
 
-# Or with Docker
+# API available at http://localhost:8000
+```
+
+**Option 3: Docker**
+```bash
 docker-compose up --build
 ```
 
-### API Usage
+### Usage
+
+**Web UI (Easiest)**
+
+1. Start the application: `./start_ui.sh`
+2. Open http://localhost:8501 in your browser
+3. Select an example or paste your own clinical note
+4. Click "Convert to FHIR"
+5. View extracted entities with highlighting
+6. Download the FHIR bundle
+
+**API Usage**
 
 ```bash
 # Health check
