@@ -46,10 +46,13 @@ htmlcov/
 .nox/
 
 # Poetry
-poetry.lock  # Remove this line if you want to commit lock file (recommended)
+# poetry.lock is tracked for reproducible builds
 
 # macOS
 .DS_Store
+
+# Python version (personal preference)
+.python-version
 
 # Logs
 *.log
