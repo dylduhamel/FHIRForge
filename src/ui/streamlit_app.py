@@ -70,7 +70,17 @@ def call_conversion_api(clinical_note: str, patient_id: str = None) -> Dict[str,
         return None
 
     except requests.exceptions.HTTPError as e:
-        st.error(f"API error: {e}")
+        if e.response.status_code == 422:
+            try:
+                error_detail = e.response.json()
+                st.error("Validation Error")
+                st.warning("Clinical note must be at least 10 characters long.")
+                with st.expander("See detailed error"):
+                    st.json(error_detail)
+            except:
+                st.error(f"Validation error: {e}")
+        else:
+            st.error(f"API error: {e}")
         return None
 
     except Exception as e:
