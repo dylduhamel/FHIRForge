@@ -80,64 +80,43 @@ fhirforge/
 ├── tests/
 │   ├── test_api.py
 │   └── test_extractor.py
-├── run.py                   # Application entry point
-├── start_ui.sh             # Start both API and UI
-├── pyproject.toml          # Poetry dependencies
-├── Dockerfile
-└── docker-compose.yml
+├── Dockerfile.api          # API container image
+├── Dockerfile.ui           # UI container image
+├── docker-compose.yml      # Multi-service orchestration
+└── pyproject.toml          # Poetry dependencies
 ```
 
 ## Getting Started
 
 ### Prerequisites
-- Python 3.11+ (managed with pyenv)
-- Poetry
+- Docker & Docker Compose
+- Git
 
-### Installation
+### Quick Start
 
 ```bash
-# Install dependencies
-poetry install
+# Clone the repository
+git clone https://github.com/yourusername/fhirforge.git
+cd fhirforge
 
-# Download spaCy model
-poetry run python -m spacy download en_core_web_sm
-```
-
-### Running the Application
-
-**Option 1: Web UI (Recommended)**
-```bash
-# Start both API and Streamlit UI
-./start_ui.sh
-
-# Then open your browser to:
-# - UI: http://localhost:8501
-# - API Docs: http://localhost:8000/docs
-```
-
-**Option 2: API Only**
-```bash
-# Run FastAPI server
-poetry run python run.py
-
-# API available at http://localhost:8000
-```
-
-**Option 3: Docker**
-```bash
+# Build and start all services
 docker-compose up --build
+
+# Access the application:
+# - Web UI: http://localhost:8501
+# - API: http://localhost:8000
+# - API Docs: http://localhost:8000/docs
 ```
 
 ### Usage
 
-**Web UI (Easiest)**
+**Web UI**
 
-1. Start the application: `./start_ui.sh`
-2. Open http://localhost:8501 in your browser
-3. Select an example or paste your own clinical note
-4. Click "Convert to FHIR"
-5. View extracted entities with highlighting
-6. Download the FHIR bundle
+1. Navigate to http://localhost:8501
+2. Select an example or paste your own clinical note
+3. Click "Convert to FHIR"
+4. View extracted entities with highlighting
+5. Download the FHIR bundle
 
 **API Usage**
 
@@ -153,10 +132,30 @@ curl -X POST http://localhost:8000/convert \
   }'
 ```
 
-### Run Tests
+### Managing Services
 
 ```bash
-poetry run pytest tests/ -v --cov=src
+# Start services
+docker-compose up
+
+# Start in detached mode (background)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+
+# Rebuild after code changes
+docker-compose up --build
+```
+
+### Running Tests
+
+```bash
+# Run tests in container
+docker-compose run --rm api pytest tests/ -v --cov=src
 ```
 
 ## API Endpoints

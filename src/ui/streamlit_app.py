@@ -6,6 +6,7 @@ clinical notes to FHIR resources using the FHIRForge API.
 """
 
 import json
+import os
 import streamlit as st
 import requests
 from typing import Dict, List, Any
@@ -43,7 +44,8 @@ Referred to physical therapy for pain management.""",
 }
 
 # API configuration
-API_BASE_URL = "http://localhost:8000"
+# Use environment variable for containerized deployment, fallback to localhost for local dev
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 def call_conversion_api(clinical_note: str, patient_id: str = None) -> Dict[str, Any]:
     """Call the FHIRForge API to convert clinical note to FHIR"""
