@@ -95,11 +95,11 @@ def highlight_entities(text: str, entities: List[Dict]) -> str:
     # Sort entities by start position in reverse to avoid offset issues
     sorted_entities = sorted(entities, key=lambda x: x['start'], reverse=True)
 
-    # Color mapping for entity types
+    # Color mapping for entity types (vibrant colors for dark background)
     colors = {
-        'condition': '#ffcccc',  # Light red
-        'medication': '#cce5ff',  # Light blue
-        'procedure': '#ccffcc',   # Light green
+        'condition': '#ff6b6b',  # Bright red
+        'medication': '#4dabf7',  # Bright blue
+        'procedure': '#51cf66',   # Bright green
     }
 
     highlighted_text = text
@@ -110,10 +110,10 @@ def highlight_entities(text: str, entities: List[Dict]) -> str:
         entity_text = entity['text']
         confidence = entity['confidence']
 
-        color = colors.get(entity_type, '#ffffcc')  # Default yellow
+        color = colors.get(entity_type, '#ffd43b')  # Bright yellow
 
-        # Create highlighted span
-        highlight = f'<span style="background-color: {color}; padding: 2px 4px; border-radius: 3px; font-weight: 500;" title="{entity_type.title()} (confidence: {confidence:.2f})">{entity_text}</span>'
+        # Create highlighted span with dark text on bright background
+        highlight = f'<span style="background-color: {color}; color: #1a1a1a; padding: 3px 6px; border-radius: 3px; font-weight: 600;" title="{entity_type.title()} (confidence: {confidence:.2f})">{entity_text}</span>'
 
         # Replace in text
         highlighted_text = highlighted_text[:start] + highlight + highlighted_text[end:]
@@ -144,10 +144,10 @@ def display_entity_card(entity: Dict):
         conf_color = "red"
 
     st.markdown(f"""
-    <div style="background-color: #f0f2f6; padding: 10px; border-radius: 5px; margin: 5px 0;">
-        {emoji} <strong>{entity_type.title()}</strong>: {text}
-        <span style="float: right; color: {conf_color};">●</span>
-        <span style="float: right; margin-right: 10px;">{confidence:.0%}</span>
+    <div style="background-color: #1e1e1e; color: #ffffff; padding: 12px; border-radius: 5px; margin: 5px 0; border: 1px solid #404040;">
+        {emoji} <strong style="color: #ffffff;">{entity_type.title()}</strong>: <span style="color: #e0e0e0;">{text}</span>
+        <span style="float: right; color: {conf_color}; font-size: 18px;">●</span>
+        <span style="float: right; margin-right: 10px; color: #b0b0b0;">{confidence:.0%}</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -273,9 +273,9 @@ with col2:
             # Legend
             st.markdown("""
             <div style="margin-bottom: 10px;">
-                <span style="background-color: #ffcccc; padding: 2px 8px; border-radius: 3px; margin-right: 10px;">Condition</span>
-                <span style="background-color: #cce5ff; padding: 2px 8px; border-radius: 3px; margin-right: 10px;">Medication</span>
-                <span style="background-color: #ccffcc; padding: 2px 8px; border-radius: 3px;">Procedure</span>
+                <span style="background-color: #ff6b6b; color: #1a1a1a; padding: 4px 10px; border-radius: 3px; margin-right: 10px; font-weight: 600;">Condition</span>
+                <span style="background-color: #4dabf7; color: #1a1a1a; padding: 4px 10px; border-radius: 3px; margin-right: 10px; font-weight: 600;">Medication</span>
+                <span style="background-color: #51cf66; color: #1a1a1a; padding: 4px 10px; border-radius: 3px; font-weight: 600;">Procedure</span>
             </div>
             """, unsafe_allow_html=True)
 
@@ -283,7 +283,7 @@ with col2:
             if entities:
                 highlighted_html = highlight_entities(st.session_state['last_note'], entities)
                 st.markdown(
-                    f'<div style="background-color: white; padding: 15px; border-radius: 5px; border: 1px solid #ddd; white-space: pre-wrap;">{highlighted_html}</div>',
+                    f'<div style="background-color: #2b2b2b; color: #e8e8e8; padding: 15px; border-radius: 5px; border: 1px solid #555; white-space: pre-wrap; line-height: 1.6;">{highlighted_html}</div>',
                     unsafe_allow_html=True
                 )
             else:
